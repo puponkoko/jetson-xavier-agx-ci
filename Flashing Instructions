@@ -1,0 +1,91 @@
+Flashing NVIDIA Jetson Xavier AGX with Official Image
+___________________________________________________________________________________________________________________________
+
+This document describes the procedure to flash the NVIDIA Jetson Xavier AGX with the official Jetson Linux image provided by NVIDIA.
+___________________________________________________________________________________________________________________________
+
+Official documentation: NVIDIA Developer Guide – Quick Start (https://docs.nvidia.com/jetson/archives/r34.1/DeveloperGuide/text/IN/QuickStart.html)
+___________________________________________________________________________________________________________________________
+
+OS images: NVIDIA Jetson Linux Archive (https://developer.nvidia.com/embedded/jetson-linux-archive)
+___________________________________________________________________________________________________________________________
+
+Prerequisites:
+	1. Host PC running Ubuntu 20.04 or 18.04 (x86_64 architecture)
+	2. USB-C cable to connect Jetson to the host PC
+	3. Downloaded Jetson Linux package from the Jetson Linux Archive (Driver Package (BSP) & Sample Root Filesystem)
+	4. At least 25 GB of free disk space on the host machine
+___________________________________________________________________________________________________________________________
+
+Entering Recovery Mode:
+	1. Power off the Jetson Xavier AGX
+	2. Connect the device to the host PC via USB-C
+	3. Press and hold the Force Recovery button
+	4. While holding the button, press the Power button once
+	5. Release the Force Recovery button
+
+Confirm that the device is detected by running the following command on the host PC:
+
+	$ lsusb
+
+An NVIDIA Corp. device should appear in the list.
+___________________________________________________________________________________________________________________________
+
+Manual Flash (L4T, Ubuntu 20.04 LTS, GUI, Nvidia Drivers, etc):
+
+	1. Extract the Jetson Linux package:
+		$ sudo tar -xvzf Jetson_Linux_Rxx.x.x_aarch64.tbz2
+		(after the process is done, open the directory)
+		$ cd Linux_for_Tegra
+	2. Extract the Root File System:
+		$ cd Linux_for_Tegra/rootfs/
+		$ sudo tar -xvzf ../../Tegra_Linux_Sample-Root-Filesystem_Rxx.x.x_aarch64.tbz2
+	3. Applying binaries:
+		$ cd ..
+		$ sudo ./apply_binaries.sh
+
+	(Make sure your device is in recovery mode)
+
+	4. Run the flash command:
+		$ sudo ./flash.sh ${BOARD} mmcblk0p1
+
+	${BOARD}: 
+		jetson-agx-xavier-devkit
+		jetson-agx-xavier-industrial
+		jetson-agx-orin-devkit
+		jetson-xavier-nx-devkit
+		jetson-xavier-nx-devkit-emmc
+
+
+	Wait for the process to finish. The Jetson will reboot automatically with the newly flashed image.
+___________________________________________________________________________________________________________________________
+
+Minimal OS Manual Flash (L4T, Ubuntu 20.04):
+
+	This option provides a completely barebone Ubuntu 20.04 installation, leaving out all unnecessary packages and GUI components to maximize performance and flexibility.
+
+	
+	Origin: "Minimized L4T" configuration for JetPack 5.x (https://nvidia-ai-iot.github.io/jetson-min-disk/jp5_minimal-l4t.html)
+
+
+	1. Install Git, if haven't: 
+		$ sudo apt update
+		$ sudo apt install git -y
+	2. Clone the nvidia-ai-iot repository:
+		$ git clone https://github.com/NVIDIA-AI-IOT/jetson-min-disk
+	3. Start the flashing process:
+		$ cd jetson-min-disk
+		$ ./scripts/prepare_l4t_dir.sh -b ${BOARD} -v r35.1.0 --flavor bone300 --l4tpkg k8
+		$ cd Linux_for_Tegra
+		$ sudo ./flash.sh ${BOARD} mmcblk0p1
+
+	${BOARD}: 
+		jetson-agx-xavier-devkit
+		jetson-agx-xavier-industrial
+		jetson-agx-orin-devkit
+		jetson-xavier-nx-devkit
+		jetson-xavier-nx-devkit-emmc
+
+
+	Wait for the process to finish. The Jetson will reboot automatically with the newly flashed image. 
+__________________________________________________________________________________________________________________________
