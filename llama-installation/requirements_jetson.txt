@@ -1,0 +1,30 @@
+# Python requirements for Llama 4B quantized model on Jetson Xavier AGX
+# Install with: pip3 install -r requirements_jetson.txt
+
+# Core ML libraries
+numpy>=1.21.0
+torch>=1.10.0
+torchvision>=0.11.0
+torchaudio>=0.10.0
+
+# Hugging Face ecosystem
+transformers>=4.30.0
+accelerate>=0.20.0
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+safetensors>=0.3.0
+huggingface-hub>=0.15.0
+tokenizers>=0.13.0
+
+# Quantization support
+bitsandbytes>=0.39.0
+optimum>=1.10.0
+auto-gptq>=0.4.0
+
+# Inference engines
+llama-cpp-python>=0.1.0
+onnxruntime-gpu>=1.14.0
+
+# Utilities
+psutil>=5.9.0
+
